@@ -47,6 +47,12 @@ public class User {
         this.userState = userState;
     }
 
+    public User(String userPassword, String userIc, String userContact) {
+        this.userPassword = userPassword;
+        this.userIc = userIc;
+        this.userContact = userContact;
+    }
+
     public String getUserPassword() {
         return userPassword;
     }

@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping("registerUser")
     public User createUser(@RequestBody Map<String, String> payload) {
-       return UserRepo.save(new User(payload.get("userPassword"),payload.get("firstName"),payload.get("lastName"),payload.get("userIc"),payload.get("userContact"), payload.get("userAddress"), payload.get("userRole"), payload.get("userPostCode"),payload.get("userState")));
+       return UserRepo.save(new User(payload.get("userPassword"),payload.get("userIc"), payload.get("userContact")));
     }
 
 
