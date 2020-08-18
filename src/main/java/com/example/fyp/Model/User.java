@@ -27,6 +27,8 @@ public class User {
     private String userPostCode;
     @Column(name = "user_State")
     private String userState;
+    @Column(name = "user_pic")
+    private String userPic;
 
     public User() {
     }
@@ -35,7 +37,7 @@ public class User {
         this.userIc = userIc;
     }
 
-    public User(String userPassword, String firstName, String lastName, String userIc, String userContact, String userAddress, String userRole, String userPostCode, String userState) {
+    public User(String userPassword, String firstName, String lastName, String userIc, String userContact, String userAddress, String userRole, String userPostCode, String userState, String userPic) {
         this.userPassword = userPassword;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,6 +47,7 @@ public class User {
         this.userRole = userRole;
         this.userPostCode = userPostCode;
         this.userState = userState;
+        this.userPic = userPic;
     }
 
     public User(String userPassword, String userIc, String userContact) {
@@ -123,5 +126,21 @@ public class User {
 
     public void setUserState(String userState) {
         this.userState = userState;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUserPic() {
+        return userPic;
+    }
+
+    public void setUserPic(String userPic) {
+        this.userPic = userPic;
     }
 }

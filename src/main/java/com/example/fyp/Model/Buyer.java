@@ -16,30 +16,27 @@ public class Buyer {
     private String buyerContact;
     @Column(name = "buyer_Location")
     private String buyerLocation;
-    @Column(name = "buyer_address1")
-    private String buyerAddress1;
-    @Column(name = "buyer_address2")
-    private String buyerAddress2;
+    @Column(name = "buyer_address")
+    private String buyerAddress;
     @Column(name = "buyer_rate")
     private String buyerRate;
     @Column(name = "user_ic")
     private String userIc;
-    @Column(name = "user_check")
-    private String userCheck;
+    @Column(name = "admin_check")
+    private String adminCheck;
 
     public Buyer() {
     }
 
-    public Buyer(String buyerId, String buyerName, String buyerContact, String buyerLocation, String buyerAddress1, String buyerAddress2, String buyerRate, String userIc, String userCheck) {
+    public Buyer(String buyerId, String buyerName, String buyerContact, String buyerLocation, String buyerAddress, String buyerRate, String userIc, String adminCheck) {
         this.buyerId = buyerId;
         this.buyerName = buyerName;
         this.buyerContact = buyerContact;
         this.buyerLocation = buyerLocation;
-        this.buyerAddress1 = buyerAddress1;
-        this.buyerAddress2 = buyerAddress2;
+        this.buyerAddress = buyerAddress;
         this.buyerRate = buyerRate;
         this.userIc = userIc;
-        this.userCheck = userCheck;
+        this.adminCheck = adminCheck;
     }
 
     public String getBuyerId() {
@@ -83,22 +80,6 @@ public class Buyer {
         this.buyerLocation = buyerLocation;
     }
 
-    public String getBuyerAddress1() {
-        return buyerAddress1;
-    }
-
-    public void setBuyerAddress1(String buyerAddress1) {
-        this.buyerAddress1 = buyerAddress1;
-    }
-
-    public String getBuyerAddress2() {
-        return buyerAddress2;
-    }
-
-    public void setBuyerAddress2(String buyerAddress2) {
-        this.buyerAddress2 = buyerAddress2;
-    }
-
     public String getUserIc() {
         return userIc;
     }
@@ -107,11 +88,19 @@ public class Buyer {
         this.userIc = userIc;
     }
 
-    public String getUserCheck() {
-        return userCheck;
+    public String getBuyerAddress() {
+        return buyerAddress;
     }
 
-    public void setUserCheck(String userCheck) {
-        this.userCheck = userCheck;
+    public void setBuyerAddress(String buyerAddress) {
+        this.buyerAddress = buyerAddress;
+    }
+
+    public String getAdminCheck() {
+        return adminCheck;
+    }
+
+    public void setAdminCheck(String adminCheck) {
+        this.adminCheck = adminCheck;
     }
 }

@@ -35,6 +35,9 @@ public class UserController {
     @PostMapping("updateUser")
     public User updateUser(@RequestBody Map<String, String> payload) {
         return UserRepo.findByUserIc(payload.get("userIc")).map(user -> {
+            user.setUserPic(payload.get("userPic"));
+            user.setFirstName(payload.get("firstName"));
+            user.setLastName(payload.get("lastName"));
             user.setUserContact(payload.get("userContact"));
             user.setUserAddress(payload.get("userAddress"));
             user.setUserPostCode(payload.get("userPostCode"));

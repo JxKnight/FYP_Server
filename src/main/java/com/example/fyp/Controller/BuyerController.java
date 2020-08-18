@@ -31,9 +31,9 @@ public class BuyerController {
         for(Buyer countlist: list){
             count++;
         }
-        String userCheck="false";
+        String adminCheck="false";
         String buyerId = "buyer"+count;
-        BuyerRepo.save(new Buyer(buyerId,payload.get("buyerName"),payload.get("buyerContact"),payload.get("buyerAddress1"),payload.get("buyerAddress2"),payload.get("buyerLocation"),payload.get("buyerRate"),payload.get("userIc"),userCheck));
+        BuyerRepo.save(new Buyer(buyerId,payload.get("buyerName"),payload.get("buyerContact"),payload.get("buyerAddress"),payload.get("buyerLocation"),payload.get("buyerRate"),payload.get("userIc"),adminCheck));
     }
     @PostMapping("getBuyerByLocation")
     public List<Buyer> getBuyerByLocation(@RequestBody Map<String, String> payload){
@@ -50,11 +50,11 @@ public class BuyerController {
     public List<Buyer> getAllBuyersUncheck() {
         List<Buyer> buyer = BuyerRepo.findAll();
         List<Buyer> buyerUncheck = new ArrayList<>();
-        for(Buyer currentBuyer: buyer){
-            if(currentBuyer.getUserCheck().equals("false")){
-                buyerUncheck.add(currentBuyer);
-            }
-        }
+//        for(Buyer currentBuyer: buyer){
+//            if(currentBuyer.getUserCheck().equals("false")){
+//                buyerUncheck.add(currentBuyer);
+//            }
+//        }
         return buyerUncheck;
     }
 
@@ -64,10 +64,9 @@ public class BuyerController {
             buyer.setBuyerName(payload.get("buyerName"));
             buyer.setBuyerContact(payload.get("buyerContact"));
             buyer.setBuyerLocation(payload.get("buyerLocation"));
-            buyer.setBuyerAddress1(payload.get("buyerAddress1"));
-            buyer.setBuyerAddress2(payload.get("buyerAddress2c"));
+            buyer.setBuyerAddress(payload.get("buyerAddress1"));
             buyer.setBuyerRate(payload.get("buyerRate"));
-            buyer.setUserCheck(payload.get("userCheck"));
+            buyer.setAdminCheck(payload.get("userCheck"));
             BuyerRepo.save(buyer);
             return buyer;
         }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
