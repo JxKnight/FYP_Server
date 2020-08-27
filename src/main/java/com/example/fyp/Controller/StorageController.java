@@ -18,7 +18,7 @@ public class StorageController {
     @Autowired
     StorageRepository StorageRepo;
 
-    @GetMapping("storage")
+    @GetMapping("warehouse")
     public List<Storage> getAllStorage() {
         return StorageRepo.findAll();
     }
@@ -28,10 +28,15 @@ public class StorageController {
         StorageRepo.save(new Storage(payload.get("productsCategory"),payload.get("productsId"),payload.get("productsName"),payload.get("productsQuantity")));
     }
 
-    @PostMapping("updateStorage")
+    @PostMapping("warehouseFilter")
+    public List<Storage> getAllStorageByFilter(@RequestBody Map<String, String> payload){
+        return StorageRepo.findAllByProductsCategory(payload.get("productsCategory"));
+    }
+    @PostMapping("updateWarehouse")
     public Storage updateStorage(@RequestBody Map<String, String> payload) {
         return StorageRepo.findByProductsId(payload.get("productsId")).map(product -> {
             product.setProductsQuantity(payload.get("productsQuantity"));
+            product.setUserUpdate(payload.get("userUpdate"));
             StorageRepo.save(product);
             return product;
         }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));

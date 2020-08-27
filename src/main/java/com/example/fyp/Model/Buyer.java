@@ -18,8 +18,6 @@ public class Buyer {
     private String buyerLocation;
     @Column(name = "buyer_address")
     private String buyerAddress;
-    @Column(name = "buyer_rate")
-    private String buyerRate;
     @Column(name = "user_ic")
     private String userIc;
     @Column(name = "admin_check")
@@ -28,14 +26,18 @@ public class Buyer {
     public Buyer() {
     }
 
-    public Buyer(String buyerId, String buyerName, String buyerContact, String buyerLocation, String buyerAddress, String buyerRate, String userIc, String adminCheck) {
+    public Buyer(String buyerId, String buyerName, String buyerContact, String buyerLocation, String buyerAddress, String userIc, String adminCheck) {
         this.buyerId = buyerId;
         this.buyerName = buyerName;
         this.buyerContact = buyerContact;
         this.buyerLocation = buyerLocation;
         this.buyerAddress = buyerAddress;
-        this.buyerRate = buyerRate;
         this.userIc = userIc;
+        this.adminCheck = adminCheck;
+    }
+
+    public Buyer(String buyerId, String adminCheck) {
+        this.buyerId = buyerId;
         this.adminCheck = adminCheck;
     }
 
@@ -61,15 +63,6 @@ public class Buyer {
 
     public void setBuyerContact(String buyerContact) {
         this.buyerContact = buyerContact;
-    }
-
-
-    public String getBuyerRate() {
-        return buyerRate;
-    }
-
-    public void setBuyerRate(String buyerRate) {
-        this.buyerRate = buyerRate;
     }
 
     public String getBuyerLocation() {

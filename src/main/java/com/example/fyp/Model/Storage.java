@@ -17,6 +17,8 @@ public class Storage {
     private String productsCategory;
     @Column(name = "products_quantity")
     private String productsQuantity;
+    @Column(name = "userUpdate")
+    private String userUpdate;
 
     public Storage() {
     }
@@ -60,4 +62,11 @@ public class Storage {
         this.productsName = productsName;
     }
 
+    public String getUserUpdate() {
+        return userUpdate;
+    }
+
+    public void setUserUpdate(String userUpdate) {
+        this.userUpdate = userUpdate;
+    }
 }

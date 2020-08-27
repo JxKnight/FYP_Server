@@ -29,6 +29,8 @@ public class User {
     private String userState;
     @Column(name = "user_pic")
     private String userPic;
+    @Column(name = "user_firstEntry")
+    private String userFirstEntry;
 
     public User() {
     }
@@ -50,10 +52,11 @@ public class User {
         this.userPic = userPic;
     }
 
-    public User(String userPassword, String userIc, String userContact) {
+    public User(String userPassword, String userIc, String userContact, String userFirstEntry) {
         this.userPassword = userPassword;
         this.userIc = userIc;
         this.userContact = userContact;
+        this.userFirstEntry = userFirstEntry;
     }
 
     public String getUserPassword() {
@@ -142,5 +145,13 @@ public class User {
 
     public void setUserPic(String userPic) {
         this.userPic = userPic;
+    }
+
+    public String getUserFirstEntry() {
+        return userFirstEntry;
+    }
+
+    public void setUserFirstEntry(String userFirstEntry) {
+        this.userFirstEntry = userFirstEntry;
     }
 }

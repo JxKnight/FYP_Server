@@ -28,7 +28,8 @@ public class UserController {
 
     @PostMapping("registerUser")
     public User createUser(@RequestBody Map<String, String> payload) {
-       return UserRepo.save(new User(payload.get("userPassword"),payload.get("userIc"), payload.get("userContact")));
+        String firstEntry = "true";
+       return UserRepo.save(new User(payload.get("userPassword"),payload.get("userIc"), payload.get("userContact"),firstEntry));
     }
 
 
@@ -58,7 +59,7 @@ public class UserController {
     @PostMapping("currentUser")
     public User searchCurrentUser(@RequestBody Map<String, String> payload) {
         Optional<User> userOptional = UserRepo.findByUserIc(payload.get("userIc"));
-        return userOptional.orElseThrow(() ->  new NullPointerException("No record : " + payload.get("firstName")+payload.get("lastName")));
+        return userOptional.orElseThrow(() ->  new NullPointerException("No record "));
     }
 
     @GetMapping("Employees")

@@ -4,10 +4,7 @@ import com.example.fyp.Model.Buyer;
 import com.example.fyp.Model.Role;
 import com.example.fyp.Repository.BuyerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,43 +30,27 @@ public class BuyerController {
         }
         String adminCheck="false";
         String buyerId = "buyer"+count;
-        BuyerRepo.save(new Buyer(buyerId,payload.get("buyerName"),payload.get("buyerContact"),payload.get("buyerAddress"),payload.get("buyerLocation"),payload.get("buyerRate"),payload.get("userIc"),adminCheck));
+        BuyerRepo.save(new Buyer(buyerId,payload.get("buyerName"),payload.get("buyerContact"),payload.get("buyerLocation"),payload.get("buyerAddress"),payload.get("userIc"),adminCheck));
     }
     @PostMapping("getBuyerByLocation")
     public List<Buyer> getBuyerByLocation(@RequestBody Map<String, String> payload){
         List<Buyer> buyer = BuyerRepo.findByBuyerLocation(payload.get("buyerLocation"));
         return buyer;
     }
-    @PostMapping("getBuyerDetails")
-    public Buyer getBuyerDetails(@RequestBody Map<String, String> payload){
-        Optional<Buyer> buyerOptional = BuyerRepo.findByBuyerLocationAndAndBuyerName(payload.get("buyerLocation"),payload.get("buyerName"));
-        return buyerOptional.orElseThrow(() -> new NullPointerException("No Record Found"));
-    }
 
-    @GetMapping("buyersUncheck")
-    public List<Buyer> getAllBuyersUncheck() {
-        List<Buyer> buyer = BuyerRepo.findAll();
-        List<Buyer> buyerUncheck = new ArrayList<>();
-//        for(Buyer currentBuyer: buyer){
-//            if(currentBuyer.getUserCheck().equals("false")){
-//                buyerUncheck.add(currentBuyer);
-//            }
-//        }
-        return buyerUncheck;
-    }
-
-    @PostMapping("updateBuyer")
-    public Buyer updateBuyer(@RequestBody Map<String, String> payload) {
+    @PostMapping("buyerAdminCheck")
+    public Buyer adminCheck(@RequestBody Map<String, String> payload){
         return BuyerRepo.findByBuyerId(payload.get("buyerId")).map(buyer -> {
-            buyer.setBuyerName(payload.get("buyerName"));
-            buyer.setBuyerContact(payload.get("buyerContact"));
-            buyer.setBuyerLocation(payload.get("buyerLocation"));
-            buyer.setBuyerAddress(payload.get("buyerAddress1"));
-            buyer.setBuyerRate(payload.get("buyerRate"));
-            buyer.setAdminCheck(payload.get("userCheck"));
+            buyer.setAdminCheck(payload.get("adminCheck"));
             BuyerRepo.save(buyer);
             return buyer;
         }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
+    }
+
+    @PostMapping("getBuyerDetails")
+    public Buyer getBuyerDetails(@RequestParam String buyerID){
+        Optional<Buyer> buyer = BuyerRepo.findByBuyerId(buyerID);
+        return buyer.orElseThrow(() -> new NullPointerException("No Record Found"));
     }
 
     @PostMapping("deleteBuyer")

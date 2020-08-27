@@ -14,34 +14,23 @@ public class Product {
     private String productsName;
     @Column(name = "products_description")
     private String productsDescription;
-    @Column(name = "products_pack")
-    private String productsPack;
-    @Column(name = "products_quantity")
-    private String productsQuantity;
     @Column(name = "products_price")
     private String productsPrice;
     @Column(name = "products_category")
     private String productsCategory;
+    @Column(name = "products_image")
+    private String productsImage;
 
     public Product() {
     }
 
-    public Product(String productsCategory, String productsId, String productsName, String productsDescription, String productsPack, String productsQuantity, String productsPrice){
+    public Product(String productsCategory, String productsId, String productsName, String productsDescription, String productsPrice,String productsImage){
         this.productsCategory = productsCategory;
         this.productsId = productsId;
         this.productsName = productsName;
         this.productsDescription = productsDescription;
-        this.productsPack=productsPack;
-        this.productsQuantity = productsQuantity;
         this.productsPrice = productsPrice;
-    }
-
-    public String getProductsPack() {
-        return productsPack;
-    }
-
-    public void setProductsPack(String productsPack) {
-        this.productsPack = productsPack;
+        this.productsImage = productsImage;
     }
 
     public String getProductsId() {
@@ -66,14 +55,6 @@ public class Product {
 
     public void setProductsDescription(String productsDescription) {
         this.productsDescription = productsDescription;
-    }
-
-    public String getProductsQuantity() {
-        return productsQuantity;
-    }
-
-    public void setProductsQuantity(String productsQuantity) {
-        this.productsQuantity = productsQuantity;
     }
 
     public String getProductsPrice() {
