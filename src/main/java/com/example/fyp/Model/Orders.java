@@ -22,6 +22,8 @@ public class Orders {
     private String productsQuantity;
     @Column(name = "user_ic")
     private String userIc;
+    @Column(name = "orders_status")
+    private String ordersStatus;
 
     public Orders() {
     }
@@ -97,5 +99,13 @@ public class Orders {
 
     public void setUserIc(String userIc) {
         this.userIc = userIc;
+    }
+
+    public String getOrdersStatus() {
+        return ordersStatus;
+    }
+
+    public void setOrdersStatus(String ordersStatus) {
+        this.ordersStatus = ordersStatus;
     }
 }
