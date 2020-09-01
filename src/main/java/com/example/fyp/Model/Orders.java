@@ -28,13 +28,14 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(String ordersId, String ordersDescription, String ordersDate, String buyerId, String productsId, String productsQuantity, String userIc){
+    public Orders(String ordersId, String ordersDescription, String ordersDate, String buyerId, String productsId, String productsQuantity, String userIc,String ordersStatus){
         this.ordersId = ordersId;
         this.ordersDescription = ordersDescription;
         this.ordersDate = ordersDate;
         this.buyerId = buyerId;
         this.productsId = productsId;
         this.productsQuantity = productsQuantity;
+        this.ordersStatus = ordersStatus;
         this.userIc = userIc;
     }
     public int getId() {

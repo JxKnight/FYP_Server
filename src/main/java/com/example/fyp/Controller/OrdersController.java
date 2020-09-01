@@ -29,7 +29,7 @@ public class OrdersController {
             count++;
         }
         String ordersId = "order"+count;
-        return OrdersRepo.save(new Orders(ordersId,payload.get("ordersDescription"),payload.get("ordersDate"),payload.get("buyerId"),payload.get("productsId"),payload.get("productsQuantity"),payload.get("userIc")));
+        return OrdersRepo.save(new Orders(ordersId,payload.get("ordersDescription"),payload.get("ordersDate"),payload.get("buyerId"),payload.get("productsId"),payload.get("productsQuantity"),payload.get("userIc"),payload.get("ordersStatus")));
     }
 
     @PostMapping("buyerHistoryList")

@@ -25,31 +25,31 @@ public class RoleController {
 
     @PostMapping("createRoles")
     public void createRoles(@RequestBody Map<String, String> payload) {
-        RoleRepo.save(new Role(payload.get("roleName"),payload.get("roleDescription"),payload.get("roleRate"),payload.get("warehouse"),payload.get("orders"),payload.get("customers"),payload.get("reports"),payload.get("tasks")));
+        RoleRepo.save(new Role(payload.get("roleName"),payload.get("roleNum"),payload.get("roleDescription"),payload.get("roleRate"),payload.get("warehouse"),payload.get("orders"),payload.get("customers"),payload.get("reports"),payload.get("tasks")));
     }
 
     @PostMapping("currentRole")
     public Role searchRoles(@RequestBody Map<String, String> payload) {
-        Optional<Role> userOptional = RoleRepo.findByRoleName(payload.get("roleName"));
-        return userOptional.orElseThrow(() ->  new NullPointerException("No record : " +payload.get("roleName")));
+        Optional<Role> userOptional = RoleRepo.findByRoleNum(payload.get("roleNum"));
+        return userOptional.orElseThrow(() ->  new NullPointerException("No record : " +payload.get("roleNum")));
     }
 
-    @PostMapping("updateRole")
-    public Role updateRole(@RequestBody Map<String, String> payload) {
-        return RoleRepo.findByRoleName(payload.get("roleName")).map(role -> {
-            role.setRoleDescription(payload.get("roleDescription"));
-            role.setRoleRate(payload.get("roleRate"));
-            RoleRepo.save(role);
-            return role;
-        }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
-    }
-
-    @PostMapping("deleteRole")
-    public Role deleteRole(@RequestBody Map<String, String> payload) {
-        return RoleRepo.findByRoleName(payload.get("roleName")).map(role -> {
-            RoleRepo.delete(role);
-            return role;
-        }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
-    }
+//    @PostMapping("updateRole")
+//    public Role updateRole(@RequestBody Map<String, String> payload) {
+//        return RoleRepo.findByRoleName(payload.get("roleName")).map(role -> {
+//            role.setRoleDescription(payload.get("roleDescription"));
+//            role.setRoleRate(payload.get("roleRate"));
+//            RoleRepo.save(role);
+//            return role;
+//        }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
+//    }
+//
+//    @PostMapping("deleteRole")
+//    public Role deleteRole(@RequestBody Map<String, String> payload) {
+//        return RoleRepo.findByRoleName(payload.get("roleName")).map(role -> {
+//            RoleRepo.delete(role);
+//            return role;
+//        }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
+//    }
 
 }

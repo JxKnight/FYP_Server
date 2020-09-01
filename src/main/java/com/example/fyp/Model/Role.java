@@ -11,6 +11,8 @@ public class Role {
     private int id;
     @Column(name = "roles_name",unique = true)
     private String roleName;
+    @Column(name = "roles_num")
+    private String roleNum;
     @Column(name = "roles_description")
     private String roleDescription;
     @Column(name = "roles_rate")
@@ -29,8 +31,9 @@ public class Role {
     public Role() {
     }
 
-    public Role(String roleName, String roleDescription, String roleRate, String warehouse, String orders, String customers, String reports, String tasks) {
+    public Role(String roleName, String roleNum, String roleDescription, String roleRate, String warehouse, String orders, String customers, String reports, String tasks) {
         this.roleName = roleName;
+        this.roleNum = roleNum;
         this.roleDescription = roleDescription;
         this.roleRate = roleRate;
         this.warehouse = warehouse;
@@ -102,5 +105,13 @@ public class Role {
 
     public void setTasks(String tasks) {
         this.tasks = tasks;
+    }
+
+    public String getRoleNum() {
+        return roleNum;
+    }
+
+    public void setRoleNum(String roleNum) {
+        this.roleNum = roleNum;
     }
 }
