@@ -1,30 +1,24 @@
 package com.example.fyp.Controller;
 
 import com.example.fyp.Model.Attendance;
-import com.example.fyp.Model.Buyer;
-import com.example.fyp.Model.Category;
 import com.example.fyp.Model.OTP;
 import com.example.fyp.Repository.AttendanceRepository;
-import com.example.fyp.Repository.CategoryRepository;
 import com.example.fyp.Repository.OTPRepository;
 import com.example.fyp.SpringExampleApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.SecretKey;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 public class AttendanceController {
 
-    Calendar calendar ;
+    Calendar calendar;
     SimpleDateFormat dateFormat;
-
+    String expired;
     @Autowired
     AttendanceRepository AttendanceRepo;
     @Autowired
@@ -41,64 +35,90 @@ public class AttendanceController {
         return otpRepo.findAll();
     }
 
-    @GetMapping("requestAttendance")
-    public String requestAttendance(@RequestParam(value = "userIc", required = true) String text) {
-        String result ="";
-       long userIc = Long.parseLong(text);
+    @PostMapping("requestAttendance")
+    public String requestAttendance(@RequestBody Map<String, String> payload) {
+
+        String result = "";
+        long userIc = Long.parseLong(payload.get("userIc"));
         Integer otp = Integer.parseInt(String.valueOf(otp()));
-        long[] newOtp = new long[]{(otp%10000)/1000,(otp%1000)/100,(otp%100)/10,(otp%10)};
+        long[] newOtp = new long[]{(otp % 10000) / 1000, (otp % 1000) / 100, (otp % 100) / 10, (otp % 10)};
         String[] data = new String[newOtp.length];
-        for(int i=0;i< newOtp.length;i++){
-           data[i]= String.valueOf(newOtp[i]+userIc);
-           result = result+data[i]+"/";
+        for (int i = 0; i < newOtp.length; i++) {
+            data[i] = String.valueOf(newOtp[i] + userIc);
+            result = result + data[i] + "/";
         }
+
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("dd:MM:yyyy:HH:mm:ss");
         String day = dateFormat.format(calendar.getTime());
         String[] date = dateFormat.format(calendar.getTime()).split(":");
-        Integer expiredTime = Integer.parseInt(date[5])+30;
-        String etime="";
-        String expiredDate="";
+        Integer expiredSec = Integer.parseInt(date[5]) + 30;
+        String eSec = "", eMin = "";
+        Integer expiredMin;
         DecimalFormat formatter = new DecimalFormat("00");
-        if(expiredTime>=60){
-            expiredTime = expiredTime -60;
-            expiredDate = String.valueOf(Integer.parseInt(date[4])+1);
-            etime = formatter.format(expiredTime);
+        if (expiredSec > 59) {
+            expiredSec = expiredSec - 60;
+            expiredMin = Integer.parseInt(date[4]) + 1;
+            eSec = formatter.format(expiredSec);
+            if (expiredMin > 59) {
+                expiredMin = expiredMin - 60;
+                date[3] = date[3] + 1;
+                eMin = formatter.format(expiredMin);
+                expired = date[0] + ":" + date[1] + ":" + date[2] + ":" + date[3] + ":" + eMin + ":" + eSec;
+            }else{
+                eMin = formatter.format(expiredMin);
+                expired = date[0] + ":" + date[1] + ":" + date[2] + ":" + date[3] + ":" + eMin + ":" + eSec;
+            }
+        }else{
+            expired = date[0] + ":" + date[1] + ":" + date[2] + ":" + date[3] + ":" + date[4] + ":" + expiredSec;
         }
-        String expired = date[0]+":"+date[1]+":"+date[2]+":"+date[3]+":"+expiredDate+":"+etime;
-        Integer count=0;
+        Integer count = 0;
         List<OTP> list = getAllOTP();
-        for(OTP countList: list){
+        for (OTP countList : list) {
             count++;
         }
-        String OtpId = "Otp"+count;
-        otpRepo.save(new OTP(OtpId,day,expired,text,String.valueOf(otp())));
-        return expired;
+        String OtpId = "Otp" + count;
+        otpRepo.save(new OTP(OtpId, day, expired, payload.get("userIc"), String.valueOf(otp())));
+        expired="";
+        return result;
         //springExampleApp.getQRCode(result);
     }
 
     @PostMapping("createAttendance")
-    public void createAttendance(@RequestBody Map<String, String> payload) {
+    public void createAttendance(@RequestBody Map<String, String> payload) throws ParseException {
         calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        String[] date = dateFormat.format(calendar.getTime()).split(" ");
-        Integer count=0;
-        List<Attendance> list = getAllAttendance();
-        for(Attendance countList: list){
-            count++;
+        dateFormat = new SimpleDateFormat("dd:MM:yyyy:HH:mm:ss");
+        String dateTime = dateFormat.format(calendar.getTime());
+        String[] date="02:09:2020:00:27:45".split(":");
+        Date currentDate = new SimpleDateFormat("dd:MM:yyyy:HH:mm:ss").parse(dateTime);
+        Optional<OTP> optional = otpRepo.findAllByUserIcAndOtpNum(payload.get("userIc"),payload.get("otpNum"));
+        Date DateEnd = new SimpleDateFormat("dd:MM:yyyy:HH:mm:ss").parse(optional.get().getDateEnd());
+
+        long diff = DateEnd.getTime()-currentDate.getTime();
+        long x = 0l;
+        if(diff<x){
+           // status="false";
+        }else if(diff>30000l){
+           // status="not valid";
+        }else{
+            Integer count = 0;
+            List<Attendance> list = getAllAttendance();
+            for (Attendance countList : list) {
+                count++;
+            }
+            String attendanceId = "Attendance" + count;
+            AttendanceRepo.save(new Attendance(attendanceId, payload.get("userIc"), date[3]+":"+date[4]+":"+date[5], date[0]+":"+date[1]+":"+date[2]));
         }
-        String attendanceId = "Attendance"+count;
-        AttendanceRepo.save(new Attendance(attendanceId,payload.get("userIC"),date[0],date[1]));
     }
 
     public char[] otp() {
         String x = "0123456789";
         Random rndm_method = new Random();
 
-        int length=4;
+        int length = 4;
         char[] otp = new char[length];
 
-        for(int i=0;i<length;i++){
+        for (int i = 0; i < length; i++) {
             otp[i] = x.charAt(rndm_method.nextInt(x.length()));
         }
         return otp;

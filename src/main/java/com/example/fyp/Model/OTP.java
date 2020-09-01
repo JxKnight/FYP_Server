@@ -65,4 +65,12 @@ public class OTP {
     public void setUserIc(String userIc) {
         this.userIc = userIc;
     }
+
+    public String getOtpNum() {
+        return otpNum;
+    }
+
+    public void setOtpNum(String otpNum) {
+        this.otpNum = otpNum;
+    }
 }
