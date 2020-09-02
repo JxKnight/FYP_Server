@@ -2,8 +2,10 @@ package com.example.fyp.Controller;
 
 import com.example.fyp.Model.Attendance;
 import com.example.fyp.Model.OTP;
+import com.example.fyp.Model.User;
 import com.example.fyp.Repository.AttendanceRepository;
 import com.example.fyp.Repository.OTPRepository;
+import com.example.fyp.Repository.UserRepository;
 import com.example.fyp.SpringExampleApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,8 @@ public class AttendanceController {
     SpringExampleApp springExampleApp;
     @Autowired
     OTPRepository otpRepo;
+    @Autowired
+    UserRepository userRepo;
 
     @GetMapping("Attendance")
     public List<Attendance> getAllAttendance() {
@@ -81,6 +85,7 @@ public class AttendanceController {
         otpRepo.save(new OTP(OtpId, day, expired, payload.get("userIc"), String.valueOf(otp())));
         expired="";
         return result;
+        //return String.valueOf(otp());
         //springExampleApp.getQRCode(result);
     }
 
@@ -89,10 +94,12 @@ public class AttendanceController {
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("dd:MM:yyyy:HH:mm:ss");
         String dateTime = dateFormat.format(calendar.getTime());
-        String[] date="02:09:2020:00:27:45".split(":");
+        String[] date =dateTime.split(":");
         Date currentDate = new SimpleDateFormat("dd:MM:yyyy:HH:mm:ss").parse(dateTime);
         Optional<OTP> optional = otpRepo.findAllByUserIcAndOtpNum(payload.get("userIc"),payload.get("otpNum"));
         Date DateEnd = new SimpleDateFormat("dd:MM:yyyy:HH:mm:ss").parse(optional.get().getDateEnd());
+        Optional<User> optionalUser = userRepo.findByUserIc(payload.get("userIc"));
+
 
         long diff = DateEnd.getTime()-currentDate.getTime();
         long x = 0l;
@@ -101,14 +108,43 @@ public class AttendanceController {
         }else if(diff>30000l){
            // status="not valid";
         }else{
+            String day="";
             Integer count = 0;
             List<Attendance> list = getAllAttendance();
             for (Attendance countList : list) {
                 count++;
             }
+            if(Integer.parseInt(date[3])<8){
+                day="midnight";
+            }else if(Integer.parseInt(date[3])<13&&Integer.parseInt(date[3])>=8){
+                day="morning";
+            }else if(Integer.parseInt(date[3])>13&&Integer.parseInt(date[3])<19){
+                day="evening";
+            }else if(Integer.parseInt(date[3])>18){
+                day="ot";
+            }
             String attendanceId = "Attendance" + count;
-            AttendanceRepo.save(new Attendance(attendanceId, payload.get("userIc"), date[3]+":"+date[4]+":"+date[5], date[0]+":"+date[1]+":"+date[2]));
+            AttendanceRepo.save(new Attendance(attendanceId,optionalUser.get().getFirstName(), payload.get("userIc"), date[3]+":"+date[4]+":"+date[5], date[0]+":"+date[1]+":"+date[2],day));
         }
+    }
+
+    @GetMapping("getCurrentDayAttendance")
+    public List<Attendance> currentAttendance(@RequestParam String day){
+        List<Attendance> newestList = new ArrayList<>();
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("dd:MM:yyyy");
+        String dateTime = dateFormat.format(calendar.getTime());
+        List<Attendance> list = AttendanceRepo.findAllByDate(dateTime);
+        for(Attendance var : list){
+            if(var.getDay().equals(day)){
+                newestList.add(var);
+            }else if(var.getDay().equals(day)){
+                newestList.add(var);
+            }else if(var.getDay().equals(day)){
+                newestList.add(var);
+            }
+        }
+        return newestList;
     }
 
     public char[] otp() {
@@ -118,9 +154,30 @@ public class AttendanceController {
         int length = 4;
         char[] otp = new char[length];
 
-        for (int i = 0; i < length; i++) {
-            otp[i] = x.charAt(rndm_method.nextInt(x.length()));
-        }
+        do{
+            for (int i = 0; i < length; i++) {
+                otp[i] = x.charAt(rndm_method.nextInt(x.length()));
+            }
+        }while(checkOTP(String.valueOf(otp)).equals("false"));
+
         return otp;
+    }
+
+    public String checkOTP(String otp){
+        String x ="";
+        List<OTP> list = getAllOTP();
+        for (OTP List : list) {
+            if(List.getOtpNum().equals(otp)){
+                x="false";
+            }else{
+                x="true";
+            }
+        }
+        return x;
+    }
+
+    @PostMapping("calculateSalary")
+    public void calculateSalary(@RequestBody Map<String, String> payload) {
+        List<Attendance> list = AttendanceRepo.findAllByDateAndUserIc(payload.get("date"),payload.get("userIc"));
     }
 }

@@ -13,21 +13,31 @@ public class Attendance {
     private String AttendanceID;
     @Column(name = "user_Ic")
     private String userIc;
+    @Column(name = "user_Name")
+    private String userName;
     @Column(name = "time")
     private String time;
     @Column(name = "date")
     private String date;
+    @Column(name = "day")
+    private String day;
 
 
     public Attendance() {
 
     }
 
-    public Attendance(String attendanceID, String userIc, String time, String date) {
+    public Attendance(String attendanceID,String userName, String userIc, String time, String date,String day) {
         AttendanceID = attendanceID;
+        this.userName = userName;
         this.userIc = userIc;
         this.time = time;
         this.date = date;
+        this.day = day;
+    }
+
+    public Attendance(String time) {
+        this.time = time;
     }
 
     public String getAttendanceID() {
@@ -68,5 +78,21 @@ public class Attendance {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 }
