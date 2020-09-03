@@ -125,6 +125,7 @@ public class AttendanceController {
             }
             String attendanceId = "Attendance" + count;
             AttendanceRepo.save(new Attendance(attendanceId,optionalUser.get().getFirstName(), payload.get("userIc"), date[3]+":"+date[4]+":"+date[5], date[0]+":"+date[1]+":"+date[2],day));
+
         }
     }
 
@@ -177,7 +178,9 @@ public class AttendanceController {
     }
 
     @PostMapping("calculateSalary")
-    public void calculateSalary(@RequestBody Map<String, String> payload) {
+    public List<Attendance> calculateSalary(@RequestBody Map<String, String> payload) {
         List<Attendance> list = AttendanceRepo.findAllByDateAndUserIc(payload.get("date"),payload.get("userIc"));
+        //ArrayList<Attendance>
+        return list;
     }
 }
