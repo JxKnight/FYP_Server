@@ -29,12 +29,14 @@ public class UserController {
     @PostMapping("registerUser")
     public User createUser(@RequestBody Map<String, String> payload) {
         String firstEntry = "true";
-       return UserRepo.save(new User(payload.get("userPassword"),payload.get("userIc"), payload.get("userContact"),firstEntry));
+        String role = "0";
+       return UserRepo.save(new User(payload.get("userPassword"),payload.get("userIc"), payload.get("userContact"),firstEntry,role));
     }
 
 
     @PostMapping("updateUser")
     public User updateUser(@RequestBody Map<String, String> payload) {
+        String firstEntry = "false";
         return UserRepo.findByUserIc(payload.get("userIc")).map(user -> {
             user.setUserPic(payload.get("userPic"));
             user.setFirstName(payload.get("firstName"));
@@ -43,6 +45,7 @@ public class UserController {
             user.setUserAddress(payload.get("userAddress"));
             user.setUserPostCode(payload.get("userPostCode"));
             user.setUserState(payload.get("userState"));
+            user.setUserFirstEntry(firstEntry);
             UserRepo.save(user);
             return user;
         }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));

@@ -52,11 +52,12 @@ public class User {
         this.userPic = userPic;
     }
 
-    public User(String userPassword, String userIc, String userContact, String userFirstEntry) {
+    public User(String userPassword, String userIc, String userContact, String userFirstEntry,String userRole) {
         this.userPassword = userPassword;
         this.userIc = userIc;
         this.userContact = userContact;
         this.userFirstEntry = userFirstEntry;
+        this.userRole = userRole;
     }
 
     public String getUserPassword() {

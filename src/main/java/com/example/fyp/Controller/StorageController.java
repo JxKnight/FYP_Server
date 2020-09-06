@@ -42,11 +42,4 @@ public class StorageController {
         }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
     }
 
-    @PostMapping("deleteStorage")
-    public Storage deleteStorage(@RequestBody Map<String, String> payload) {
-        return StorageRepo.findByProductsId(payload.get("productsId")).map(product -> {
-            StorageRepo.delete(product);
-            return product;
-        }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
-    }
 }

@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
     List<Attendance> findAllByDate(String date);
+    List<Attendance> findAllByUserIc(String userIc);
     List<Attendance> findAllByDateAndUserIc(String date,String userIc);
 }

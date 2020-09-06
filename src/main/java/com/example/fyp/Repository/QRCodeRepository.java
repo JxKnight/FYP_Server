@@ -1,13 +1,12 @@
 package com.example.fyp.Repository;
 
-import com.example.fyp.Model.Role;
+import com.example.fyp.Model.QRCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Integer> {
-    Optional<Role> findByRoleNum(String roleNum);
+public interface QRCodeRepository extends JpaRepository<QRCode, Integer> {
+    Optional<QRCode> findByQrCodeString(String QRCode);
 }
