@@ -85,4 +85,12 @@ public class Task {
     public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
+
+    public String getProductsId() {
+        return productsId;
+    }
+
+    public void setProductsId(String productsId) {
+        this.productsId = productsId;
+    }
 }

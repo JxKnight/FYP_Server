@@ -1,8 +1,6 @@
 package com.example.fyp.Controller;
 
-import com.example.fyp.Model.Buyer;
-import com.example.fyp.Model.Storage;
-import com.example.fyp.Model.Task;
+import com.example.fyp.Model.*;
 import com.example.fyp.Repository.BuyerRepository;
 import com.example.fyp.Repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +36,17 @@ public class TaskController {
         for (int i=0;i<x;i++) {
             String taskID = "";
             taskID = "Task" + count;
-            TaskRepo.save(new Task(taskID, task[i], payload.get("taskCreateDate"), payload.get("taskUpdateDate"), sequence[i], payload.get("productsId"), Role[i]));
+            TaskRepo.save(new Task(taskID, task[i], payload.get("taskCreateDate"), payload.get("taskUpdateDate"), sequence[i], payload.get("productsId"),String.valueOf(0)));
             count++;
         }
-//        String taskID = "";
-//        taskID = "Task" + count;
-//        TaskRepo.save(new Task(taskID, payload.get("taskDescription"), payload.get("taskCreateDate"), payload.get("taskUpdateDate"), payload.get("taskSequence"), payload.get("productsId"), payload.get("userRole")));
-//        TaskRepo.save(new Task(taskID,payload.get("taskDescription"),payload.get("taskCreateDate"),payload.get("taskUpdateDate"),payload.get("taskSequence"),payload.get("productsId"),payload.get("userRole")));
+    }
+
+    @PostMapping("updateRole")
+    public Task updateUser(@RequestBody Map<String, String> payload) {
+        return TaskRepo.findByTaskId(payload.get("taskId")).map(task -> {
+            task.setUserRole(payload.get("userRole"));
+            TaskRepo.save(task);
+            return task;
+        }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
     }
 }

@@ -20,7 +20,8 @@ public class Product {
     private String productsCategory;
     @Column(name = "products_image")
     private String productsImage;
-
+    @Column(name = "products_Packaging")
+    private String productsPackaging;
     public Product() {
     }
 
@@ -71,5 +72,21 @@ public class Product {
 
     public void setProductsCategory(String productsCategory) {
         this.productsCategory = productsCategory;
+    }
+
+    public String getProductsImage() {
+        return productsImage;
+    }
+
+    public void setProductsImage(String productsImage) {
+        this.productsImage = productsImage;
+    }
+
+    public String getProductsPackaging() {
+        return productsPackaging;
+    }
+
+    public void setProductsPackaging(String productsPackaging) {
+        this.productsPackaging = productsPackaging;
     }
 }

@@ -3,11 +3,8 @@ package com.example.fyp.Controller;
 import com.example.fyp.Model.CalculateOrders;
 import com.example.fyp.Model.Orders;
 import com.example.fyp.Model.Storage;
-import com.example.fyp.Repository.CalculateOrdersRepository;
 import com.example.fyp.Repository.OrdersRepository;
 import com.example.fyp.Repository.StorageRepository;
-import org.aspectj.weaver.ast.Or;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,21 +16,16 @@ public class OrdersController {
 
     Calendar calendar;
     SimpleDateFormat dateFormat;
+    String date;
 
     @Autowired
     OrdersRepository OrdersRepo;
     @Autowired
     StorageRepository storageRepo;
-    @Autowired
-    CalculateOrdersRepository CORepo;
 
     @GetMapping("orders")
     public List<Orders> getAllOrders() {
         return OrdersRepo.findAll();
-    }
-
-    public List<CalculateOrders> getAllCalculateOrders() {
-        return CORepo.findAll();
     }
 
     @PostMapping("createOrder")
@@ -43,8 +35,10 @@ public class OrdersController {
         for (Orders countlist : list) {
             count++;
         }
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        date = dateFormat.format(calendar.getTime());
         String ordersId = "order" + count;
-        return OrdersRepo.save(new Orders(ordersId, payload.get("ordersDescription"), payload.get("ordersDate"), payload.get("buyerId"), payload.get("productsId"), payload.get("productsQuantity"), payload.get("userIc"), payload.get("ordersStatus")));
+        return OrdersRepo.save(new Orders(ordersId, payload.get("ordersDescription"), date, payload.get("buyerId"), payload.get("productsId"), payload.get("productsQuantity"), payload.get("userIc"), payload.get("ordersStatus")));
     }
 
     @PostMapping("buyerHistoryList")
@@ -67,6 +61,7 @@ public class OrdersController {
         List<CalculateOrders> allNewOrders = new ArrayList<>();
         List<String> newProductID = new ArrayList<>();
         List<CalculateOrders> TotalNewOrders = new ArrayList<>();
+        List<CalculateOrders> finalResult = new ArrayList<>();
         List<Orders> orders = OrdersRepo.findAllByOrdersStatus(x);
         for (Orders var : orders) {
             products = var.getProductsId().split("/");
@@ -92,24 +87,13 @@ public class OrdersController {
             CalculateOrders calculateOrders = new CalculateOrders(var, String.valueOf(totalQuantity));
             TotalNewOrders.add(calculateOrders);
         }
-        String resultProductID = "";
-        String resultQuantity = "";
         for (CalculateOrders calculateOrders : TotalNewOrders) {
             String xx = String.valueOf(calculate(calculateOrders.getProductID(), calculateOrders.getQuantity()));
-            resultProductID = resultProductID + calculateOrders.getProductID() + "/";
-            resultQuantity = resultQuantity + xx + "/";
+            CalculateOrders calculateOrders1 = new CalculateOrders(calculateOrders.getProductID(),xx);
+            finalResult.add(calculateOrders1);
         }
-        calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("dd:MM:yyyy");
-        String day = dateFormat.format(calendar.getTime());
-        Integer count = 0;
-        List<CalculateOrders> list = getAllCalculateOrders();
-        for (CalculateOrders countlist : list) {
-            count++;
-        }
-        String COId = "CO" + count;
-        CORepo.save(new CalculateOrders(COId, resultProductID, resultQuantity, day));
-        return TotalNewOrders;
+
+        return finalResult;
     }
     public Integer calculate(String x, String y) {
         Optional<Storage> call = storageRepo.findByProductsId(x);
