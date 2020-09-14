@@ -23,8 +23,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImgController {
 
     @GetMapping(value = "Users")
-    public ResponseEntity<InputStreamResource> getImage(@RequestParam(name = "imgPath") String img) throws IOException {
+    public ResponseEntity<InputStreamResource> getUserImage(@RequestParam(name = "imgPath") String img) throws IOException {
         ClassPathResource imageFile = new ClassPathResource("images\\users\\"+img);
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(new InputStreamResource(imageFile.getInputStream()));
+    }
+
+    @GetMapping(value = "Products")
+    public ResponseEntity<InputStreamResource> getProductImage(@RequestParam(name = "imgPath") String img) throws IOException {
+        ClassPathResource imageFile = new ClassPathResource("images\\products\\"+img);
 
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(new InputStreamResource(imageFile.getInputStream()));
     }

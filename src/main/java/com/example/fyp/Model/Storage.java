@@ -72,4 +72,12 @@ public class Storage {
     public void setUserUpdate(String userUpdate) {
         this.userUpdate = userUpdate;
     }
+
+    public String getProductsImage() {
+        return productsImage;
+    }
+
+    public void setProductsImage(String productsImage) {
+        this.productsImage = productsImage;
+    }
 }
