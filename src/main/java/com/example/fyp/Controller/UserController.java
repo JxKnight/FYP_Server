@@ -20,6 +20,8 @@ public class UserController {
 
     @Autowired
     UserRepository UserRepo;
+    @Autowired
+    ImgController imgCon;
 
     @GetMapping("users")
     public List<User> getAllUser() {
@@ -38,7 +40,7 @@ public class UserController {
     public User updateUser(@RequestBody Map<String, String> payload) {
         String firstEntry = "false";
         return UserRepo.findByUserIc(payload.get("userIc")).map(user -> {
-            user.setUserPic(payload.get("userPic"));
+            //user.setUserPic(payload.get("userPic"));
             user.setFirstName(payload.get("firstName"));
             user.setLastName(payload.get("lastName"));
             user.setUserContact(payload.get("userContact"));
@@ -46,6 +48,13 @@ public class UserController {
             user.setUserPostCode(payload.get("userPostCode"));
             user.setUserState(payload.get("userState"));
             user.setUserFirstEntry(firstEntry);
+
+            try {
+                String x = imgCon.saveUserImage(payload.get("userPic"),payload.get("userIc"));
+                user.setUserPic(x);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             UserRepo.save(user);
             return user;
         }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
@@ -107,5 +116,6 @@ public class UserController {
             return user;
         }).orElseThrow(() -> new NullPointerException("Unable to update empty record"));
     }
+
 }
 

@@ -19,15 +19,18 @@ public class Storage {
     private String productsQuantity;
     @Column(name = "userUpdate")
     private String userUpdate;
+    @Column(name = "products_image")
+    private String productsImage;
 
     public Storage() {
     }
 
-    public Storage(String productsCategory, String productsId, String productsName, String productsQuantity){
+    public Storage(String productsCategory, String productsId, String productsName, String productsQuantity,String productsImage){
         this.productsCategory = productsCategory;
         this.productsId = productsId;
         this.productsName = productsName;
         this.productsQuantity = productsQuantity;
+        this.productsImage = productsImage;
     }
 
     public String getProductsQuantity() {

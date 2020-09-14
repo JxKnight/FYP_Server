@@ -23,10 +23,10 @@ public class StorageController {
         return StorageRepo.findAll();
     }
 
-    @PostMapping("createStorage")
-    public void createStorage(@RequestBody Map<String, String> payload) {
-        StorageRepo.save(new Storage(payload.get("productsCategory"),payload.get("productsId"),payload.get("productsName"),payload.get("productsQuantity")));
-    }
+//    @PostMapping("createStorage")
+//    public void createStorage(@RequestBody Map<String, String> payload) {
+//        StorageRepo.save(new Storage(payload.get("productsCategory"),payload.get("productsId"),payload.get("productsName"),payload.get("productsQuantity")));
+//    }
 
     @PostMapping("warehouseFilter")
     public List<Storage> getAllStorageByFilter(@RequestBody Map<String, String> payload){

@@ -126,11 +126,11 @@ public class AttendanceController {
             }
             if (Integer.parseInt(date[3]) < 8) {
                 day = "midnight";
-            } else if (Integer.parseInt(date[3]) < 13 && Integer.parseInt(date[3]) >= 8) {
+            } else if (Integer.parseInt(date[3]) <= 13 && Integer.parseInt(date[3]) >= 8) {
                 day = "morning";
-            } else if (Integer.parseInt(date[3]) > 13 && Integer.parseInt(date[3]) < 19) {
+            } else if (Integer.parseInt(date[3]) >= 14 && Integer.parseInt(date[3]) < 19) {
                 day = "evening";
-            } else if (Integer.parseInt(date[3]) > 18) {
+            } else if (Integer.parseInt(date[3]) >= 19) {
                 day = "ot";
             }
             String attendanceId = "Attendance" + count;

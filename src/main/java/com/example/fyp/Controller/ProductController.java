@@ -18,6 +18,8 @@ public class ProductController {
     ProductRepository ProductRepo;
     @Autowired
     StorageRepository StorageRepo;
+    @Autowired
+    ImgController imgCon;
 
     @GetMapping("products")
     public List<Product> getAllProducts() {
@@ -25,11 +27,16 @@ public class ProductController {
     }
 
     @PostMapping("createProduct")
-    public Product createProduct(@RequestBody Map<String, String> payload) {
+    public void createProduct(@RequestBody Map<String, String> payload) {
         String productsQuantity="0";
-        StorageRepo.save(new Storage(payload.get("productsCategory"),payload.get("productsId"),payload.get("productsName"),productsQuantity));
-       return ProductRepo.save(new Product(payload.get("productsCategory"),payload.get("productsId"),payload.get("productsName"),payload.get("productsDescription"),payload.get("productsPrice"),payload.get("productsImage")));
-
+        String x;
+        try {
+            x = imgCon.saveProductImage(payload.get("productsImage"),payload.get("productsId"));
+            StorageRepo.save(new Storage(payload.get("productsCategory"),payload.get("productsId"),payload.get("productsName"),productsQuantity,x));
+            ProductRepo.save(new Product(payload.get("productsCategory"),payload.get("productsId"),payload.get("productsName"),payload.get("productsDescription"),payload.get("productsPrice"),x));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @PostMapping("getAllProductByCategory")
     public List<Product> getAllProductByCategory(@RequestBody Map<String, String> payload){
